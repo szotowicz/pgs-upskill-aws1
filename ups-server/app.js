@@ -19,13 +19,13 @@ db.connect(error => {
   if (error) {
     console.error(`[${(new Date()).toISOString()}][ERROR] MySQL not connected. Details: ${error}`)
   } else {
-    console.log(`[${(new Date()).toISOString()}] MySQL connected`);
+    console.log(`[${(new Date()).toISOString()}] MySQL connected`)
     const checkTableSql = `SELECT * FROM information_schema.tables WHERE table_schema = '${process.env.DB_NAME}' AND table_name = '${TABLE_NAME}'`
     db.query(checkTableSql, (error, results) => {
       if (error) {
         console.error(`[${(new Date()).toISOString()}][ERROR] Checking if table exists failed. Details: ${error}`)
       } else if (results.length > 0) {
-        console.log(`[${(new Date()).toISOString()}] ${TABLE_NAME} table exists`);
+        console.log(`[${(new Date()).toISOString()}] ${TABLE_NAME} table exists`)
       } else {
         const createTableSql = `CREATE TABLE ${process.env.DB_NAME}.${TABLE_NAME} (
           id int(11) NOT NULL,
@@ -37,7 +37,7 @@ db.connect(error => {
           if (error) {
             console.error(`[${(new Date()).toISOString()}][ERROR] Creating table failed. Details: ${error}`)
           } else {
-            console.log(`[${(new Date()).toISOString()}] ${TABLE_NAME} table has been created`);
+            console.log(`[${(new Date()).toISOString()}] ${TABLE_NAME} table has been created`)
           }
         })
       }
@@ -45,15 +45,15 @@ db.connect(error => {
   }
 })
 
-app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.json())
+app.use(express.urlencoded())
 
 app.get('/language', (req, res) => {
   const getLanguageSql = `SELECT * FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.id = ${RECORD_ID}`
   db.query(getLanguageSql, (error, results) => {
     if (error) {
       console.error(`[${(new Date()).toISOString()}][ERROR] Featching language failed. Details: ${error}`)
-      res.status(500).send('Unexpected internal error');
+      res.status(500).send('Unexpected internal error')
       return
     }
     if (!results || results.length === 0) {
@@ -61,17 +61,17 @@ app.get('/language', (req, res) => {
         id: RECORD_ID,
         name: 'Type Script',
         updatedAt: (new Date()).toISOString(),
-      });
+      })
     }
-    res.send(results[0]);
+    res.send(results[0])
   })
 })
 
 app.post('/language', (req, res) => {
-  let updatedName = req.body.name || 'Type Script';
+  let updatedName = req.body.name || 'Type Script'
   if (!(/^[A-Za-z]+$/.test(updatedName))) {
     updatedName = 'Type Script'
-    console.log(`[${(new Date()).toISOString()}] Invalid updated name. Setup default name: ${updatedName}`);
+    console.log(`[${(new Date()).toISOString()}] Invalid updated name. Setup default name: ${updatedName}`)
   }
 
   const updated = {
@@ -83,10 +83,10 @@ app.post('/language', (req, res) => {
   db.query(updateLanguageSql, updated, error => {
     if (error) {
       console.error(`[${(new Date()).toISOString()}][ERROR] Updating language failed. Details: ${error}`)
-      res.status(500).send('Unexpected internal error');
+      res.status(500).send('Unexpected internal error')
       return
     }
-    res.sendStatus(204);
+    res.sendStatus(204)
   })
 })
 
