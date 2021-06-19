@@ -1,8 +1,13 @@
 const dotenv = require('dotenv')
 const express = require('express')
+const cors = require('cors');
 const mysql = require('mysql')
 
 dotenv.config()
+const app = express()
+app.use(cors());
+
+console.log(`[${(new Date()).toISOString()}] Database: '${process.env.DB_NAME}' | Table: '${process.env.DB_TABLE_NAME}'`);
 
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -11,7 +16,6 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME,
 })
 const TABLE_NAME = process.env.DB_TABLE_NAME
-const app = express()
 const PORT = 3001
 const RECORD_ID = 1
 
@@ -69,7 +73,7 @@ app.get('/language', (req, res) => {
 
 app.post('/language', (req, res) => {
   let updatedName = req.body.name || 'Type Script'
-  if (!(/^[A-Za-z]+$/.test(updatedName))) {
+  if (!(/^[A-Za-z-_ ]+$/.test(updatedName))) {
     updatedName = 'Type Script'
     console.log(`[${(new Date()).toISOString()}] Invalid updated name. Setup default name: ${updatedName}`)
   }
