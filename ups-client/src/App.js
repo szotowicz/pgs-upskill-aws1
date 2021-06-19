@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Button, TextField } from '@material-ui/core';
 import logo from './logo.svg';
 import './App.css';
 
-// TODO: to remove
-const mockLanguage = {
-  id: 0,
-  name: 'C++',
-  updatedAt: (new Date()).toISOString()
-};
-
+const serverAddress = 'http://localhost:3001/language'
 const defaultLanguage = {
   id: 0,
   name: '???',
@@ -21,8 +16,11 @@ const App = () => {
   const [updatedLanguage, setUpdatedLanguage] = useState("");
 
   useEffect(() => {
-    // TODO: call API
-    setBestLanguage(mockLanguage);
+    async function fetchLanguage() {
+      const response = await axios(serverAddress);
+      setBestLanguage(response.data)
+    }
+    fetchLanguage();
   }, []);
 
   const onChange = event => {
@@ -35,7 +33,7 @@ const App = () => {
       name: updatedLanguage,
       updatedAt: (new Date()).toISOString()
     }
-    console.log('TODO: call API', updated);
+    axios.post(serverAddress, updated)
     setBestLanguage(updated);
   };
 
@@ -44,7 +42,7 @@ const App = () => {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          The best programming language is: {bestLanguage.name}
+          The best programming language is: "{bestLanguage.name}"
         </p>
         <div>
           <TextField id="input" className="input-new-language" label="Update best language" variant="filled" onChange={onChange} />
