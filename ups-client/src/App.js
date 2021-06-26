@@ -4,7 +4,7 @@ import { Button, TextField } from '@material-ui/core';
 import logo from './logo.svg';
 import './App.css';
 
-const serverAddress = 'http://localhost:3001/language'
+const serverAddress = process.env.UPSKILL_SERVER || 'http://localhost:3001/language'
 const defaultLanguage = {
   id: 0,
   name: '???',

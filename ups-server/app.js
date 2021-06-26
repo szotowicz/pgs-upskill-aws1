@@ -16,7 +16,7 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME,
 })
 const TABLE_NAME = process.env.DB_TABLE_NAME
-const PORT = 3001
+const PORT = process.env.APP_PORT || 3000
 const RECORD_ID = 1
 
 db.connect(error => {
